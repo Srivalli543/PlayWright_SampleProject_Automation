@@ -1,39 +1,56 @@
 package com.PlayWright.SampleProject;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.microsoft.playwright.*;
+import org.junit.jupiter.api.*;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
+import java.util.Arrays;
 
 public class SamplePlayWrightTest {
-	
-	Playwright playwright;
-	Browser browser;
-	Page page;
-	
-	@BeforeEach
-	public void setup() {
-		playwright=Playwright.create();
-		browser=playwright.chromium().launch();
-		page=browser.newPage();
-		
-		page.navigate("https://practicesoftwaretesting.com/");
-	}
-	
-	@AfterEach
-	public void tearDown() {
-		browser.close();
-		playwright.close();
-	}
 
-	@Test
-	public void DisplayTitle() {
-		String title=page.title();
-		System.out.println("Page Title is: " + title);
-		Assertions.assertTrue(title.contains("Practice Software Testing"));		
-	}
+    private static Playwright playwright;
+    private static Browser browser;
+    private static BrowserContext browserContext;
+
+    Page page;
+
+    @BeforeAll
+    public static void setUpBrowser() {
+        playwright = Playwright.create();
+        browser = playwright.chromium().launch(
+                new BrowserType.LaunchOptions()
+                        .setHeadless(true)
+                        .setArgs(Arrays.asList("--no-sandbox","--disable-extensions","--disable-gpu"))
+        );
+        browserContext = browser.newContext();
+    }
+
+    @BeforeEach
+    public void setUp() {
+        page = browserContext.newPage();
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        browser.close();
+        playwright.close();
+    }
+
+    @Test
+    void shouldShowThePageTitle() {
+        page.navigate("https://practicesoftwaretesting.com");
+        String title = page.title();
+        Assertions.assertTrue(title.contains("Practice Software Testing"));
+    }
+
+    @Test
+    void shouldShowSearchTermsInTheTitle() {
+        page.navigate("https://practicesoftwaretesting.com");
+        page.locator("[placeholder=Search]").fill("Pliers");
+        page.locator("button:has-text('Search')").click();
+
+        int matchingProductCount = page.locator(".card-title").count();
+
+        Assertions.assertTrue(matchingProductCount > 0);
+    }
+
 }
