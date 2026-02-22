@@ -15,35 +15,7 @@ import com.microsoft.playwright.junit.UsePlaywright;
 @UsePlaywright(HeadlessChromeOptions.class)
 public class PlaywrightLocatorsTest {
 	
-//	protected static Playwright playwright;
-//	protected static Browser browser;
-//	protected static BrowserContext browserContext;
-//	
-//	Page page;
-//	
-//	@BeforeAll
-//	static void setUpBrowser() {
-//		playwright=Playwright.create();
-//		  browser = playwright.chromium().launch(
-//	                new BrowserType.LaunchOptions().setHeadless(true)
-//	                        .setArgs(Arrays.asList("--no-sandbox", "--disable-extensions", "--disable-gpu"))
-//	        );
-//	}
-//	@BeforeEach
-//	void setUp() {
-//		browserContext=browser.newContext();
-//		page=browserContext.newPage();
-//	}
-//	@AfterEach
-//	void closeContext() {
-//		browserContext.close();
-//	}
-//	@AfterAll
-//	static void tearDown() {
-//		browser.close();
-//		playwright.close();
-//	}
-//	
+
 	private void openPage(Page page) {
 	    page.navigate("https://practicesoftwaretesting.com");
 	 }
